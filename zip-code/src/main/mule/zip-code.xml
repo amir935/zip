@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="40ab8620-f65f-48a8-9523-67e65bfe8517" basePath="project1">
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="7e26f15c-97bd-41ba-9a1f-ea3531805ac0" basePath="/ZipCodesAPI.svc/1.0/" >
+		<http:request-connection protocol="HTTPS" host="api.zip-codes.com"/>
+	</http:request-config>
+	<flow name="zip-codeFlow" doc:id="d6b499d0-beca-42ab-b9bb-f01d75d4d95e" >
+		<http:listener doc:name="Listener" doc:id="471553c4-a054-461f-bb27-ae1d15df1b4c" config-ref="HTTP_Listener_config" path="zipcode/{zip}"/>
+		<set-variable value="#[attributes.uriParams.zip]" doc:name="Set Variable" doc:id="8206af94-7025-4a43-946e-fe1c68e0b119" variableName="zip"/>
+		<http:request method="GET" doc:name="Request" doc:id="3b0ca892-a053-47ed-9476-5a9f84970036" config-ref="HTTP_Request_configuration" path="GetZipCodeDetails/{zip}">
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	zip : vars.zip
+}]]]></http:uri-params>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	key : attributes.queryParams.key
+}]]]></http:query-params>
+		</http:request>
+	</flow>
+</mule>
