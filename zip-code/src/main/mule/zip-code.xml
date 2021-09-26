@@ -12,12 +12,12 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	</http:request-config>
 	<flow name="zip-codeFlow" doc:id="d6b499d0-beca-42ab-b9bb-f01d75d4d95e" >
 		<http:listener doc:name="Listener" doc:id="471553c4-a054-461f-bb27-ae1d15df1b4c" config-ref="HTTP_Listener_config" path="zipcode/{zip}"/>
-		<set-variable value="#[attributes.uriParams.zip]" doc:name="Set Variable" doc:id="8206af94-7025-4a43-946e-fe1c68e0b119" variableName="zip"/>
+		<set-variable value="#[attributes.uriParams.zip]" doc:name="Set Variable" doc:id="8206af94-7025-4a43-946e-fe1c68e0b119" variableName="zip1"/>
 		<http:request method="GET" doc:name="Request" doc:id="3b0ca892-a053-47ed-9476-5a9f84970036" config-ref="HTTP_Request_configuration" path="GetZipCodeDetails/{zip}">
 			<http:uri-params ><![CDATA[#[output application/java
 ---
 {
-	zip : vars.zip
+	zip : vars.zip1
 }]]]></http:uri-params>
 			<http:query-params ><![CDATA[#[output application/java
 ---
